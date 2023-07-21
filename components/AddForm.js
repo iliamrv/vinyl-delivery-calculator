@@ -1,19 +1,35 @@
 import { useState } from "react";
+import supabase from "../src/supabase";
 
-function AddForm() {
+function AddForm({ setNewItems }) {
   const [vinylTitle, setVinylTitle] = useState("");
   const [deliveryPrice, setDeliveryPrice] = useState("");
   const [vinylPrice, setVinylPrice] = useState("");
+  const [vinylNewPrice, setVinylNewPrice] = useState("");
 
-  function handleSubmit(e) {
+  const newItem = {
+    id: Math.round(Math.random() * 10000000),
+    name: vinylTitle,
+    price: vinylPrice,
+    newprice: vinylNewPrice,
+  };
+
+  async function handleSubmit(e) {
     e.preventDefault();
-    console.log(vinylPrice, vinylTitle);
+
+    // console.log(newItem);
+
+    const { data: newItem, error } = await supabase
+      .from("facts")
+      .insert([{ price: vinylPrice, name: vinylTitle }])
+      .select();
+    setNewItems((items) => [newItem[0], ...items]);
+    // setVinylPrice("");
+    // setVinylTitle("");
   }
 
   return (
     <div className="bg-[#f5f5f5] p-10 rounded">
-      <h2>Delivery price</h2>
-
       <div className="flex justify-start gap-x-8 gap-y-4 ">
         <div className="">
           <label htmlFor="">Delivery price, €</label>
