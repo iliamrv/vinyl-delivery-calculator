@@ -3,16 +3,16 @@ import supabase from "../src/supabase";
 
 function AddForm({ setNewItems }) {
   const [vinylTitle, setVinylTitle] = useState("");
-  const [deliveryPrice, setDeliveryPrice] = useState("");
-  const [vinylPrice, setVinylPrice] = useState("");
-  const [vinylNewPrice, setVinylNewPrice] = useState("");
 
-  const newItem = {
-    id: Math.round(Math.random() * 10000000),
-    name: vinylTitle,
-    price: vinylPrice,
-    newprice: vinylNewPrice,
-  };
+  const [vinylPrice, setVinylPrice] = useState("");
+  // const [vinylNewPrice, setVinylNewPrice] = useState("");
+
+  // const newItem = {
+  //   id: Math.round(Math.random() * 10000000),
+  //   name: vinylTitle,
+  //   price: vinylPrice,
+  //   newprice: vinylNewPrice,
+  // };
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -24,27 +24,12 @@ function AddForm({ setNewItems }) {
       .insert([{ price: vinylPrice, name: vinylTitle }])
       .select();
     setNewItems((items) => [newItem[0], ...items]);
-    // setVinylPrice("");
-    // setVinylTitle("");
+    setVinylPrice("");
+    setVinylTitle("");
   }
 
   return (
-    <div className="bg-[#f5f5f5] p-10 rounded">
-      <div className="flex justify-start gap-x-8 gap-y-4 ">
-        <div className="">
-          <label htmlFor="">Delivery price, €</label>
-        </div>
-
-        <input
-          className=" w-20"
-          type="number"
-          name=""
-          id="delivery-price"
-          value={deliveryPrice}
-          onChange={(e) => setDeliveryPrice(e.target.value)}
-        />
-      </div>
-
+    <div>
       <h2>Add new item</h2>
 
       <form onSubmit={handleSubmit}>
