@@ -28,6 +28,7 @@ export default function Page() {
                 <th>LP Title</th>
                 <th>Old price</th>
                 <th>New price</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -49,10 +50,15 @@ export default function Page() {
                     <span className="price">
                       BYR {` `}
                       {Math.round(
-                        (fact.price + deliveryPrice / newItems.length + 10) *
-                          euroRate
+                        (fact.price +
+                          Number(deliveryPrice) / newItems.length +
+                          10) *
+                          Number(euroRate)
                       )}
                     </span>
+                  </td>
+                  <td>
+                    <button>x</button>
                   </td>
                 </tr>
               ))}
