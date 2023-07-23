@@ -23,7 +23,7 @@ function AddForm({ setNewItems }) {
       .from("facts")
       .insert([{ price: vinylPrice, name: vinylTitle }])
       .select();
-    setNewItems((items) => [newItem[0], ...items]);
+    // setNewItems((items) => [newItem[0], ...items]);
     setVinylPrice("");
     setVinylTitle("");
   }

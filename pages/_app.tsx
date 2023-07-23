@@ -1,6 +1,15 @@
 import { useState } from "react";
 import supabase from "../src/supabase";
 import "/styles/globals.css";
+import {
+  ArrowRight,
+  FileMinus,
+  Trash2Fill,
+  X,
+  XCircle,
+  XSquare,
+  XSquareFill,
+} from "react-bootstrap-icons";
 
 import AddForm from "../components/AddForm";
 
@@ -16,6 +25,21 @@ export default function Page() {
 
   getFacts();
 
+  const handleDelete = async (fact) => {
+    // console.log(fact.id);
+
+    const { data, error } = await supabase
+      .from("facts")
+      .delete()
+      .eq("id", fact.id);
+
+    if (error) {
+      console.log(error);
+    }
+
+    console.log(fact);
+  };
+
   return (
     <>
       <div className="md:container md:mx-auto flex justify-center">
@@ -28,7 +52,10 @@ export default function Page() {
                 <th>LP Title</th>
                 <th>Old price</th>
                 <th>New price</th>
-                <th>Action</th>
+                <th>
+                  {" "}
+                  <Trash2Fill />
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -58,7 +85,10 @@ export default function Page() {
                     </span>
                   </td>
                   <td>
-                    <button>x</button>
+                    {/* <button onClick={close}>x</button> */}
+                    <button onClick={() => handleDelete(fact)}>
+                      <X color="royalblue" size={22} />
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -89,7 +119,7 @@ export default function Page() {
                 onChange={(e) => setEuroRate(e.target.value)}
               />
             </div>
-            <AddForm setNewItems={setNewItems} />{" "}
+            <AddForm setNewItems={setNewItems} />
           </div>
         </article>
       </div>

@@ -6,9 +6,12 @@
     "start": "next start"
   },
   "dependencies": {
+    "@heroicons/react": "^2.0.18",
     "@supabase/supabase-js": "^2.26.0",
+    "bootstrap-icons": "^1.10.5",
     "next": "latest",
     "react": "18.2.0",
+    "react-bootstrap-icons": "^1.10.3",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
