@@ -1,21 +1,15 @@
 import { useState } from "react";
 import supabase from "../src/supabase";
 import "/styles/globals.css";
-import {
-  ArrowRight,
-  FileMinus,
-  Trash2Fill,
-  X,
-  XCircle,
-  XSquare,
-  XSquareFill,
-} from "react-bootstrap-icons";
+import { Recycle, Trash2, X } from "react-bootstrap-icons";
 
 import AddForm from "../components/AddForm";
 
 export default function Page() {
-  const [deliveryPrice, setDeliveryPrice] = useState("");
+  const [deliveryPrice, setDeliveryPrice] = useState("16.72");
   const [euroRate, setEuroRate] = useState("3.3");
+
+  // const newprice = deliveryPrice;
 
   const [newItems, setNewItems] = useState([]);
   async function getFacts() {
@@ -32,12 +26,6 @@ export default function Page() {
       .from("facts")
       .delete()
       .eq("id", fact.id);
-
-    if (error) {
-      console.log(error);
-    }
-
-    console.log(fact);
   };
 
   return (
@@ -52,9 +40,9 @@ export default function Page() {
                 <th>LP Title</th>
                 <th>Old price</th>
                 <th>New price</th>
+                <th>Profit</th>{" "}
                 <th>
-                  {" "}
-                  <Trash2Fill />
+                  <Trash2 size={22} />
                 </th>
               </tr>
             </thead>
@@ -75,17 +63,17 @@ export default function Page() {
                   <td>
                     {/* <span className="price">€{fact.newprice} </span> */}
                     <span className="price">
-                      BYR {` `}
+                      €{" "}
                       {Math.round(
-                        (fact.price +
+                        fact.price +
                           Number(deliveryPrice) / newItems.length +
-                          10) *
-                          Number(euroRate)
+                          10
                       )}
                     </span>
                   </td>
+
+                  <td></td>
                   <td>
-                    {/* <button onClick={close}>x</button> */}
                     <button onClick={() => handleDelete(fact)}>
                       <X color="royalblue" size={22} />
                     </button>
@@ -112,9 +100,12 @@ export default function Page() {
               <label htmlFor="">Euro rate</label>
 
               <input
+                step="0.1"
                 className=" w-20"
                 type="number"
+                placeholder={euroRate}
                 name=""
+                min={euroRate}
                 id="delivery-price"
                 onChange={(e) => setEuroRate(e.target.value)}
               />
