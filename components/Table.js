@@ -2,7 +2,7 @@ import React from "react";
 import supabase from "../src/supabase";
 import { Trash2, X } from "react-bootstrap-icons";
 
-function Table({ newItems, deliveryPrice }) {
+function Table({ newItems, deliveryPrice, euroRate }) {
   const handleDelete = async (fact) => {
     const { data, error } = await supabase
       .from("facts")
@@ -57,9 +57,12 @@ function Table({ newItems, deliveryPrice }) {
               <td>
                 {/* <span className="price">€{fact.newprice} </span> */}
                 <span className="price">
-                  €{" "}
+                  BYR{" "}
                   {Math.round(
-                    fact.price + Number(deliveryPrice) / newItems.length + 10
+                    (fact.price +
+                      Number(deliveryPrice) / newItems.length +
+                      10) *
+                      euroRate
                   )}
                 </span>
               </td>

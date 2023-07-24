@@ -25,9 +25,10 @@ function AddForm({ setNewItems }) {
       <h2>Add new item</h2>
 
       <form onSubmit={handleSubmit}>
-        <div className="flex justify-start">
-          <div>
+        <div className="flex ">
+          <div class="">
             <input
+              className=""
               type="text"
               placeholder="LP title"
               name="vinyl-title"
@@ -39,7 +40,7 @@ function AddForm({ setNewItems }) {
 
           <div>
             <input
-              className="mx-10 w-20"
+              className="mx-10  w-20"
               type="number"
               id=""
               value={vinylPrice}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import supabase from "../src/supabase";
 import "/styles/globals.css";
 import Table from "../components/Table";
@@ -6,6 +6,7 @@ import Table from "../components/Table";
 import AddForm from "../components/AddForm";
 
 export default function Page() {
+  const [currencyOptions, setCurrencyOptions] = useState([]);
   const [deliveryPrice, setDeliveryPrice] = useState("16.72");
   const [euroRate, setEuroRate] = useState("3.3");
 
@@ -17,13 +18,28 @@ export default function Page() {
 
   getFacts();
 
+  useEffect(() => {
+    fetch("https://api.nbrb.by/exrates/rates/451").then((res) =>
+      res.json().then((data) => {
+        setCurrencyOptions([data.Cur_OfficialRate]);
+
+        // setToCurrency(firstCurrency);
+        // setExchangeRate(data[firstCurrency]);
+      })
+    );
+  }, []);
+
   return (
     <>
       <div className="md:container md:mx-auto sm:mx-auto  flex justify-center ">
         <div className="prose lg:prose-xl mt-20 my-20">
           <h1 className="text-13xl font-bold">Vinyl Delivery Calculator</h1>
 
-          <Table newItems={newItems} deliveryPrice={deliveryPrice} />
+          <Table
+            newItems={newItems}
+            deliveryPrice={deliveryPrice}
+            euroRate={euroRate}
+          />
 
           <div className="bg-[#f5f5f5] p-10 rounded">
             <div className="flex justify-start gap-x-8 gap-y-4 ">
@@ -39,15 +55,14 @@ export default function Page() {
               />
             </div>
             <div className="flex justify-start gap-x-8 gap-y-4 mt-10 ">
-              <label htmlFor="">Euro rate</label>
+              <label htmlFor="">Euro rate (NBRB)</label>
 
               <input
                 step="0.1"
                 className=" w-20"
                 type="number"
-                placeholder={euroRate}
                 name=""
-                min={euroRate}
+                defaultValue={currencyOptions}
                 id="delivery-price"
                 onChange={(e) => setEuroRate(e.target.value)}
               />
