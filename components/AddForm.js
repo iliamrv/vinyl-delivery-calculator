@@ -26,7 +26,7 @@ function AddForm({ setNewItems }) {
 
       <form onSubmit={handleSubmit}>
         <div className="flex ">
-          <div class="">
+          <div>
             <input
               className=""
               type="text"

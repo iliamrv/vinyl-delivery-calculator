@@ -43,7 +43,7 @@ export default function Page() {
 
           <div className="bg-[#f5f5f5] p-10 rounded">
             <div className="flex justify-start gap-x-8 gap-y-4 ">
-              <label htmlFor="">Delivery price, €</label>
+              <label>Delivery price, €</label>
 
               <input
                 className=" w-20"
@@ -55,7 +55,7 @@ export default function Page() {
               />
             </div>
             <div className="flex justify-start gap-x-8 gap-y-4 mt-10 ">
-              <label htmlFor="">Euro rate (NBRB)</label>
+              <label>Euro rate (NBRB)</label>
 
               <input
                 step="0.1"
@@ -63,7 +63,7 @@ export default function Page() {
                 type="number"
                 name=""
                 defaultValue={currencyOptions}
-                id="delivery-price"
+                id="currency-price"
                 onChange={(e) => setEuroRate(e.target.value)}
               />
             </div>
