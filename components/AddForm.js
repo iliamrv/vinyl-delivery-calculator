@@ -5,14 +5,6 @@ function AddForm({ setNewItems }) {
   const [vinylTitle, setVinylTitle] = useState("");
 
   const [vinylPrice, setVinylPrice] = useState("");
-  // const [vinylNewPrice, setVinylNewPrice] = useState("");
-
-  // const newItem = {
-  //   id: Math.round(Math.random() * 10000000),
-  //   name: vinylTitle,
-  //   price: vinylPrice,
-  //   newprice: vinylNewPrice,
-  // };
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -23,7 +15,7 @@ function AddForm({ setNewItems }) {
       .from("facts")
       .insert([{ price: vinylPrice, name: vinylTitle }])
       .select();
-    // setNewItems((items) => [newItem[0], ...items]);
+
     setVinylPrice("");
     setVinylTitle("");
   }
@@ -58,7 +50,9 @@ function AddForm({ setNewItems }) {
           <div>
             <input
               type="submit"
-              className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-4 border border-blue-500 hover:border-transparent rounded"
+              value="Add"
+              className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold
+               hover:text-white py-1 px-4 border border-blue-500 hover:border-transparent rounded"
             />
           </div>
         </div>
