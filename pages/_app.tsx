@@ -13,6 +13,7 @@ export default function Page() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [currencyOptions, setCurrencyOptions] = useState([]);
+  const [tax, setTax] = useState(+10);
   const [deliveryPrice, setDeliveryPrice] = useState(initialDeliveryPrice);
   // const [euroRate, setEuroRate] = useState(initialEuroRate);
 
@@ -46,6 +47,7 @@ export default function Page() {
               deliveryPrice={deliveryPrice}
               currencyOptions={currencyOptions}
               setIsLoading={setIsLoading}
+              tax={tax}
             />
           ) : (
             <Loading />
@@ -65,12 +67,28 @@ export default function Page() {
                 onChange={(e) => setDeliveryPrice(+e.target.value)}
               />
             </div>
+
+            <div className="flex justify-start gap-x-8 gap-y-4 mt-10 ">
+              <label>Tax for LP</label>
+
+              <input
+                className=" w-20"
+                type="number"
+                min="0"
+                name=""
+                id="tax"
+                value={tax}
+                onChange={(e) => setTax(+e.target.value)}
+              />
+            </div>
+
             <div className="flex justify-start gap-x-8 gap-y-4 mt-10 ">
               <label>Euro rate (NBRB): </label>
 
               {currencyOptions}
 
               {/* 
+
 
 
               <input
@@ -83,6 +101,7 @@ export default function Page() {
                 onChange={(e) => setEuroRate(e.target.value)}
               /> */}
             </div>
+
             <AddForm setNewItems={setNewItems} />
           </div>
         </div>

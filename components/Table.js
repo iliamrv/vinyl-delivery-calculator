@@ -3,11 +3,13 @@ import supabase from "../src/supabase";
 import ClearIcon from "@mui/icons-material/Clear";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-function Table({ newItems, deliveryPrice, currencyOptions, setIsLoading }) {
-  // Taxes for every item
-
-  const tax = 10;
-
+function Table({
+  newItems,
+  deliveryPrice,
+  currencyOptions,
+  setIsLoading,
+  tax,
+}) {
   let sum = 0;
   let taxSum = 0;
 
