@@ -1,42 +1,49 @@
 import React from "react";
 import supabase from "../src/supabase";
-import { Trash2, X } from "react-bootstrap-icons";
+import ClearIcon from "@mui/icons-material/Clear";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-function Table({ newItems, deliveryPrice, euroRate }) {
-  const handleDelete = async (fact) => {
-    const { data, error } = await supabase
-      .from("facts")
-      .delete()
-      .eq("id", fact.id);
-  };
+function Table({ newItems, deliveryPrice, currencyOptions, setIsLoading }) {
+  // Taxes for every item
+
+  const tax = 10;
 
   let sum = 0;
-  newItems.forEach((element) => {
-    sum += element.price;
+  let taxSum = 0;
+
+  newItems.forEach((lp, index) => {
+    sum += lp.price;
+    taxSum += lp.price + tax;
+    lp.newprice = Math.round(
+      (lp.price + deliveryPrice / newItems.length + tax) * currencyOptions
+    );
   });
 
-  let addSum = 0;
-  newItems.forEach((element) => {
-    addSum += element.price + 10;
-  });
+  const handleDelete = async (db_name) => {
+    setIsLoading(true);
+    const { data, error } = await supabase
+      .from("lp_items")
+      .delete()
+      .eq("id", db_name.id);
+    setIsLoading(false);
+  };
 
-  //   function addSum(items) {
-  //     items = items + 10 + Number(deliveryPrice);
-  //     return items;
-  //   }
+  const totalPrice = Math.round(sum + deliveryPrice);
+  const newTotalPrice = Math.round(taxSum) + +deliveryPrice;
+  const profit = Math.round(taxSum - sum);
 
   return (
     <div>
-      <table className="min-w-full ">
+      <table className="table w-full">
         <thead className="border-b bg-neutral-50 font-medium dark:border-neutral-500 dark:text-neutral-800">
           <tr>
             <th>#</th>
             <th>LP Title</th>
             <th>Old price</th>
             <th>New price</th>
-            <th>Profit</th>{" "}
+
             <th>
-              <Trash2 size={22} />
+              <DeleteIcon />
             </th>
           </tr>
         </thead>
@@ -55,43 +62,29 @@ function Table({ newItems, deliveryPrice, euroRate }) {
                 <span className="price">€{fact.price} </span>
               </td>
               <td>
-                {/* <span className="price">€{fact.newprice} </span> */}
-                <span className="price">
-                  BYR{" "}
-                  {Math.round(
-                    (fact.price +
-                      Number(deliveryPrice) / newItems.length +
-                      10) *
-                      euroRate
-                  )}
-                </span>
+                <span className="price">{`BYR` + fact.newprice}</span>
               </td>
 
-              <td></td>
               <td>
                 <button onClick={() => handleDelete(fact)}>
-                  <X color="royalblue" size={22} />
+                  <ClearIcon />
                 </button>
               </td>
             </tr>
           ))}
-
-          <tr>
-            <td></td>
-            <td></td>
-            <td>
-              Total Price: <b>€{Math.round(sum + Number(deliveryPrice))}</b>
-            </td>
-            <td>
-              New price: <b>€{Math.round(addSum) + Number(deliveryPrice)}</b>
-            </td>
-            <td>
-              Profit: <b>€{Math.round(addSum - sum)}</b>
-            </td>
-            <td></td>
-          </tr>
         </tbody>
       </table>
+
+      <hr />
+      <p>
+        Total Price: <b>€{totalPrice} </b>
+        <br />
+        New price: <b>€{newTotalPrice}</b>
+        <br />
+        Profit: <b>€{profit}</b> (€
+        {profit / newItems.length} for each)
+      </p>
+      <hr />
     </div>
   );
 }

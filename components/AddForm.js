@@ -3,21 +3,22 @@ import supabase from "../src/supabase";
 
 function AddForm({ setNewItems }) {
   const [vinylTitle, setVinylTitle] = useState("");
-
   const [vinylPrice, setVinylPrice] = useState("");
+
+  function ResetFields() {
+    setVinylPrice("");
+    setVinylTitle("");
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
 
-    // console.log(newItem);
-
     const { data: newItem, error } = await supabase
-      .from("facts")
+      .from("lp_items")
       .insert([{ price: vinylPrice, name: vinylTitle }])
       .select();
 
-    setVinylPrice("");
-    setVinylTitle("");
+    ResetFields();
   }
 
   return (
@@ -25,8 +26,8 @@ function AddForm({ setNewItems }) {
       <h2>Add new item</h2>
 
       <form onSubmit={handleSubmit}>
-        <div className="flex ">
-          <div>
+        <div className="flex  flex-row flex-wrap gap-3">
+          <div class="">
             <input
               className=""
               type="text"
@@ -40,20 +41,23 @@ function AddForm({ setNewItems }) {
 
           <div>
             <input
-              className="mx-10  w-20"
+              className="shrink w-24"
               type="number"
+              min="0"
+              step="0.1"
               id=""
+              placeholder="Price"
               value={vinylPrice}
               onChange={(e) => setVinylPrice(e.target.value)}
             />
           </div>
 
-          <div>
+          <div className="">
             <input
               type="submit"
               value="Add"
-              className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold
-               hover:text-white py-1 px-4 border border-blue-500 hover:border-transparent rounded"
+              className="basis-1/4 form-input bg-transparent hover:bg-blue-500 text-blue-700 font-semibold
+               hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
             />
           </div>
         </div>
