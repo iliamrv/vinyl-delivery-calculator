@@ -62,7 +62,7 @@ export default function Page() {
                 name=""
                 id="delivery-price"
                 value={deliveryPrice}
-                onChange={(e) => setDeliveryPrice(e.target.value)}
+                onChange={(e) => setDeliveryPrice(+e.target.value)}
               />
             </div>
             <div className="flex justify-start gap-x-8 gap-y-4 mt-10 ">
