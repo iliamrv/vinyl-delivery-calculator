@@ -5,3 +5,13 @@
 .price {
   font-weight: bold;
 }
+
+.price-field input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+price-field:input[type="number"] {
+  -moz-appearance: textfield;
+}

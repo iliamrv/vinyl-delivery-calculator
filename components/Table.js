@@ -1,37 +1,35 @@
 import React from "react";
-import supabase from "../src/supabase";
+import { useState, useEffect } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Spinner from "../components/Spinner";
 
 function Table({
   newItems,
   deliveryPrice,
+  isSpinner,
   currencyOptions,
-  setIsLoading,
   tax,
+  handleDelete,
 }) {
   let sum = 0;
   let taxSum = 0;
 
-  newItems.forEach((lp, index) => {
-    sum += lp.price;
-    taxSum += lp.price + tax;
-    lp.newprice = Math.round(
-      (lp.price + deliveryPrice / newItems.length + tax) * currencyOptions
+  const calcNewPrice = function (item) {
+    item = Math.round(
+      (item + deliveryPrice / newItems.length + tax) * currencyOptions
     );
-  });
-
-  const handleDelete = async (db_name) => {
-    setIsLoading(true);
-    const { data, error } = await supabase
-      .from("lp_items")
-      .delete()
-      .eq("id", db_name.id);
-    setIsLoading(false);
+    return item;
   };
 
+  newItems.forEach((lp) => {
+    sum += lp.price;
+    taxSum += lp.price + tax;
+    lp.newprice = calcNewPrice(lp.price);
+  });
+
   const totalPrice = Math.round(sum + deliveryPrice);
-  const newTotalPrice = Math.round(taxSum) + +deliveryPrice;
+  const newTotalPrice = Math.round(taxSum) + deliveryPrice;
   const profit = Math.round(taxSum - sum);
 
   return (
@@ -43,10 +41,7 @@ function Table({
             <th>LP Title</th>
             <th>Old price</th>
             <th>New price</th>
-
-            <th>
-              <DeleteIcon />
-            </th>
+            <th> {isSpinner ? <Spinner /> : <DeleteIcon />}</th>
           </tr>
         </thead>
         <tbody>
@@ -66,7 +61,6 @@ function Table({
               <td>
                 <span className="price">{`BYR` + fact.newprice}</span>
               </td>
-
               <td>
                 <button onClick={() => handleDelete(fact)}>
                   <ClearIcon />
@@ -76,7 +70,6 @@ function Table({
           ))}
         </tbody>
       </table>
-
       <hr />
       <p>
         Total Price: <b>€{totalPrice} </b>

@@ -5,29 +5,27 @@ function AddForm({ setNewItems }) {
   const [vinylTitle, setVinylTitle] = useState("");
   const [vinylPrice, setVinylPrice] = useState("");
 
-  function ResetFields() {
+  function resetFields() {
     setVinylPrice("");
     setVinylTitle("");
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
-
     const { data: newItem, error } = await supabase
       .from("lp_items")
       .insert([{ price: vinylPrice, name: vinylTitle }])
       .select();
-
-    ResetFields();
+    setNewItems((lp_items) => [newItem[0], ...lp_items]);
+    resetFields();
   }
 
   return (
     <div>
       <h2>Add new item</h2>
-
       <form onSubmit={handleSubmit}>
         <div className="flex  flex-row flex-wrap gap-3">
-          <div class="">
+          <div>
             <input
               className=""
               type="text"
@@ -38,12 +36,11 @@ function AddForm({ setNewItems }) {
               onChange={(e) => setVinylTitle(e.target.value)}
             />
           </div>
-
           <div>
             <input
-              className="shrink w-24"
-              type="number"
-              min="0"
+              className="shrink w-24 price-field"
+              type="text"
+              min="1"
               step="0.1"
               id=""
               placeholder="Price"
@@ -51,7 +48,6 @@ function AddForm({ setNewItems }) {
               onChange={(e) => setVinylPrice(e.target.value)}
             />
           </div>
-
           <div className="">
             <input
               type="submit"

@@ -2,30 +2,45 @@ import { useState, useEffect } from "react";
 import supabase from "../src/supabase";
 import Table from "../components/Table";
 import AddForm from "../components/AddForm";
-import Loading from "./loading";
-
+import Loading from "../components/loading";
 import "/styles/globals.css";
 
-export default function Page() {
-  const db_name = `lp_items`;
-  const initialDeliveryPrice = 16.72;
-  // const initialEuroRate = 3.4;
+const db_name = `lp_items`;
 
+export default function Page() {
+  const initialDeliveryPrice = 16.72;
   const [isLoading, setIsLoading] = useState(false);
+  const [isSpinner, setIsSpinner] = useState(false);
   const [currencyOptions, setCurrencyOptions] = useState([]);
   const [tax, setTax] = useState(+10);
   const [deliveryPrice, setDeliveryPrice] = useState(initialDeliveryPrice);
-  // const [euroRate, setEuroRate] = useState(initialEuroRate);
-
   const [newItems, setNewItems] = useState([]);
 
-  async function getLPitems() {
-    const { data: lp_items, error } = await supabase.from(db_name).select("*");
-    setNewItems(lp_items);
-    setIsLoading(true);
-  }
+  const filterAfterDelete = (id) => {
+    setNewItems((prevNewItems) => {
+      return prevNewItems.filter((item) => item.id !== id);
+    });
+  };
 
-  getLPitems();
+  const handleDelete = async (db_name) => {
+    setIsSpinner(true);
+    const { data: movies, error } = await supabase
+      .from("lp_items")
+      .delete()
+      .eq("id", db_name.id);
+    filterAfterDelete(db_name.id);
+    setIsSpinner(false);
+  };
+
+  useEffect(function () {
+    async function getLpItems() {
+      setIsLoading(true);
+      const { data: movies, error } = await supabase.from(db_name).select("*");
+      setNewItems(movies);
+      setIsLoading(false);
+    }
+    getLpItems();
+  }, []);
 
   useEffect(() => {
     fetch("https://api.nbrb.by/exrates/rates/451").then((res) =>
@@ -42,15 +57,16 @@ export default function Page() {
           <h1>Vinyl Delivery Calculator</h1>
 
           {isLoading ? (
+            <Loading />
+          ) : (
             <Table
               newItems={newItems}
+              handleDelete={handleDelete}
               deliveryPrice={deliveryPrice}
               currencyOptions={currencyOptions}
-              setIsLoading={setIsLoading}
+              isSpinner={isSpinner}
               tax={tax}
             />
-          ) : (
-            <Loading />
           )}
 
           <div className="bg-[#f5f5f5] p-10 rounded ">
@@ -84,22 +100,7 @@ export default function Page() {
 
             <div className="flex justify-start gap-x-8 gap-y-4 mt-10 ">
               <label>Euro rate (NBRB): </label>
-
               {currencyOptions}
-
-              {/* 
-
-
-
-              <input
-                className=" w-20"
-                type="number"
-                min="0"
-                name=""
-                defaultValue={currencyOptions}
-                id="currency-price"
-                onChange={(e) => setEuroRate(e.target.value)}
-              /> */}
             </div>
 
             <AddForm setNewItems={setNewItems} />
