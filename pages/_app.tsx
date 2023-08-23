@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import supabase from "../src/supabase";
 import Table from "../components/Table";
 import AddForm from "../components/AddForm";
-import Loading from "../components/loading";
+import Loading from "../components/Loading";
+
 import "/styles/globals.css";
 
 const db_name = `lp_items`;
